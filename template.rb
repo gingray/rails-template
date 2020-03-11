@@ -24,6 +24,10 @@ run 'spring stop'
 generate 'rspec:install'
 remove_file '.rspec'
 copy_file File.join(relative_path, '.rspec'), '.rspec'
+copy_file File.join(relative_path, '.env.example'), '.env.example'
+copy_file File.join(relative_path, '.rubocop.yml'), '.rubocop.yml'
+
+
 insert_into_file 'spec/spec_helper.rb' do
   <<~RUBY
     VCR.configure do |config|
