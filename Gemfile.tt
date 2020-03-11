@@ -31,7 +31,10 @@ gem "sendgrid-ruby"
 gem "sidekiq"
 gem "turbolinks", "~> 5"
 gem "tzinfo-data"
+<% if config[:webpacker] %>
 gem "webpacker", "~> 4.0"
+<% end %>
+
 
 group :development, :test do
   gem "brakeman"

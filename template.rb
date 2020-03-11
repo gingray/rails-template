@@ -1,8 +1,9 @@
 relative_path = File.dirname(__FILE__)
 administrate = ask('use administrate y/n?').downcase == 'y'
 devise = ask('use devise y/n?').downcase == 'y'
+webpacker = ask('use webpacker y/n?').downcase == 'y'
 
-hash = { administrate: administrate, devise: devise }
+hash = { administrate: administrate, devise: devise, webpacker: webpacker }
 remove_file 'Gemfile'
 remove_file '.ruby-version'
 
@@ -27,6 +28,11 @@ copy_file File.join(relative_path, '.rspec'), '.rspec'
 copy_file File.join(relative_path, '.env.example'), '.env.example'
 copy_file File.join(relative_path, '.rubocop.yml'), '.rubocop.yml'
 
+insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
+  <<~RUBY
+  require 'vcr'
+  RUBY
+end
 
 insert_into_file 'spec/spec_helper.rb' do
   <<~RUBY
@@ -36,4 +42,19 @@ insert_into_file 'spec/spec_helper.rb' do
     end
   RUBY
 end
+
+insert_into_file 'config/application.rb', after: "require 'rails/all'\n" do
+  <<~RUBY
+  require 'dotenv/rails-now'
+  RUBY
+end
+
+insert_into_file 'config/application.rb', after: "Bundler.require(*Rails.groups)\n" do
+  <<~RUBY
+  Dotenv::Railtie.load
+  RUBY
+end
+
+copy_file File.join(relative_path, 'database.yml'), 'config/database.yml'
+
 
