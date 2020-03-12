@@ -34,6 +34,13 @@ insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
   RUBY
 end
 
+insert_into_file 'config/application.rb', after: "RSpec.configure do |config|\n" do
+  <<~RUBY
+  config.include FactoryBot::Syntax::Methods
+  RUBY
+end
+
+
 insert_into_file 'spec/spec_helper.rb' do
   <<~RUBY
     VCR.configure do |config|
