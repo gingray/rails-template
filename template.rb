@@ -69,4 +69,4 @@ end
 
 copy_file File.join(relative_path, 'database.yml'), 'config/database.yml'
 
-
+run 'rubocop -a'

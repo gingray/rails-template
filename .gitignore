@@ -52,6 +52,15 @@ build-iPhoneSimulator/
 
 # unless supporting rvm < 1.11.0 or doing something fancy, ignore this:
 .rvmrc
+.DS_Store
+.env
+.env.development
+.env.test
+.env.staging
+.env.production
+/public/system/*
+/log
+
 
 # Used by RuboCop. Remote config files pulled in from inherit_from directive.
 # .rubocop-https?--*
