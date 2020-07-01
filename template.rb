@@ -9,6 +9,9 @@ remove_file '.ruby-version'
 
 template File.join(relative_path, 'ruby-version.tt'), '.ruby-version'
 template File.join(relative_path, "Gemfile.tt"), "Gemfile", hash
+
+run 'bundle install'
+
 after_bundle do
   remove_dir "test"
 end
