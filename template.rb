@@ -3,7 +3,7 @@ administrate = ask('use administrate y/n?').downcase == 'y'
 devise = ask('use devise y/n?').downcase == 'y'
 webpacker = ask('use webpacker y/n?').downcase == 'y'
 
-hash = { administrate: administrate, devise: devise, webpacker: webpacker }
+hash = {administrate: administrate, devise: devise, webpacker: webpacker}
 remove_file 'Gemfile'
 remove_file '.ruby-version'
 
@@ -16,14 +16,29 @@ after_bundle do
   remove_dir "test"
 end
 
-application do <<-RUBY
+application do
+  <<-RUBY
     config.generators do |g|
       g.test_framework :rspec, fixture: true
       g.view_specs false
       g.helper_specs false
     end
-RUBY
+  RUBY
 end
+
+application do
+  <<-RUBY
+  if Rails.env.test? || Rails.env.development?
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins "*"
+        resource "*", headers: :any, methods: [:get, :post, :options, :patch, :put, :delete]
+      end
+    end
+  end
+  RUBY
+end
+
 run 'spring stop'
 generate 'rspec:install'
 remove_file '.rspec'
@@ -33,13 +48,13 @@ copy_file File.join(relative_path, '.rubocop.yml'), '.rubocop.yml'
 
 insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
   <<~RUBY
-  require 'vcr'
+    require 'vcr'
   RUBY
 end
 
 insert_into_file 'config/application.rb', after: "RSpec.configure do |config|\n" do
   <<~RUBY
-  config.include FactoryBot::Syntax::Methods
+    config.include FactoryBot::Syntax::Methods
   RUBY
 end
 
@@ -57,13 +72,13 @@ end
 
 insert_into_file 'config/application.rb', after: "require 'rails/all'\n" do
   <<~RUBY
-  require 'dotenv/rails-now'
+    require 'dotenv/rails-now'
   RUBY
 end
 
 insert_into_file 'config/application.rb', after: "Bundler.require(*Rails.groups)\n" do
   <<~RUBY
-  Dotenv::Railtie.load
+    Dotenv::Railtie.load
   RUBY
 end
 
