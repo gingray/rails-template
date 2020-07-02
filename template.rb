@@ -2,8 +2,10 @@ relative_path = File.dirname(__FILE__)
 administrate = ask('use administrate y/n?').downcase == 'y'
 devise = ask('use devise y/n?').downcase == 'y'
 webpacker = ask('use webpacker y/n?').downcase == 'y'
+friendly_id = ask('use friendly_id y/n?').downcase == 'y'
 
-hash = {administrate: administrate, devise: devise, webpacker: webpacker}
+
+hash = {administrate: administrate, devise: devise, webpacker: webpacker, friendly_id: friendly_id}
 remove_file 'Gemfile'
 remove_file '.ruby-version'
 
