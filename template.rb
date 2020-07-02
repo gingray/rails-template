@@ -12,9 +12,6 @@ template File.join(relative_path, "Gemfile.tt"), "Gemfile", hash
 
 run 'bundle install'
 
-after_bundle do
-  remove_dir "test"
-end
 
 application do
   <<-RUBY
@@ -52,7 +49,7 @@ insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
   RUBY
 end
 
-insert_into_file 'config/application.rb', after: "RSpec.configure do |config|\n" do
+insert_into_file 'spec/rails_helper.rb', after: "RSpec.configure do |config|\n" do
   <<~RUBY
     config.include FactoryBot::Syntax::Methods
   RUBY
@@ -82,6 +79,13 @@ insert_into_file 'config/application.rb', after: "Bundler.require(*Rails.groups)
   RUBY
 end
 
-copy_file File.join(relative_path, 'database.yml'), 'config/database.yml'
+copy_file File.join(relative_path, 'database.yml'), 'config/database.yml', force: true
 
-run 'rubocop -a'
+remove_dir "test"
+
+# INFO: fork is here bcz when run rubocop in same process space it kills it thats why its fork and Process.wait
+fork do
+  run 'rubocop -a'
+end
+Process.wait
+
