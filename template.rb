@@ -40,6 +40,7 @@ end
 
 run 'spring stop'
 generate 'rspec:install'
+generate 'annotate:install'
 remove_file '.rspec'
 copy_file File.join(relative_path, '.rspec'), '.rspec'
 copy_file File.join(relative_path, '.env.example'), '.env.example'
