@@ -2,15 +2,22 @@ relative_path = File.dirname(__FILE__)
 administrate = ask('use administrate y/n?').downcase == 'y'
 devise = ask('use devise y/n?').downcase == 'y'
 webpacker = ask('use webpacker y/n?').downcase == 'y'
+graphql = ask('use graphql y/n?').downcase == 'y'
 friendly_id = ask('use friendly_id y/n?').downcase == 'y'
 
 
+hash = { administrate: administrate, devise: devise, webpacker: webpacker, graphql: graphql }
 hash = {administrate: administrate, devise: devise, webpacker: webpacker, friendly_id: friendly_id}
 remove_file 'Gemfile'
 remove_file '.ruby-version'
 
 template File.join(relative_path, 'ruby-version.tt'), '.ruby-version'
 template File.join(relative_path, "Gemfile.tt"), "Gemfile", hash
+run 'bundle install'
+after_bundle do
+  remove_dir "test"
+  generate 'graphql:install'
+end
 
 run 'bundle install'
 
@@ -44,6 +51,7 @@ generate 'annotate:install'
 remove_file '.rspec'
 copy_file File.join(relative_path, '.rspec'), '.rspec'
 copy_file File.join(relative_path, '.env.example'), '.env.example'
+copy_file File.join(relative_path, '.env.example'), '.env'
 copy_file File.join(relative_path, '.rubocop.yml'), '.rubocop.yml'
 
 insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
@@ -85,10 +93,4 @@ end
 copy_file File.join(relative_path, 'database.yml'), 'config/database.yml', force: true
 
 remove_dir "test"
-
-# INFO: fork is here bcz when run rubocop in same process space it kills it thats why its fork and Process.wait
-fork do
-  run 'rubocop -a'
-end
-Process.wait
 

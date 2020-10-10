@@ -10,7 +10,11 @@ gem 'bootsnap', '>= 1.4.2', require: false
 <% if config[:administrate] %>
 gem 'devise'
 <% end %>
-gem 'dry-configurable'
+<% if config[:graphql] %>
+gem 'graphql'
+gem 'apollo_upload_server'
+<% end %>
+gem 'dry-configurable's
 gem 'dry-validation'
 gem 'faraday'
 <% if config[:friendly_id] %>
