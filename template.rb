@@ -6,21 +6,18 @@ graphql = ask('use graphql y/n?').downcase == 'y'
 friendly_id = ask('use friendly_id y/n?').downcase == 'y'
 
 
-hash = { administrate: administrate, devise: devise, webpacker: webpacker, graphql: graphql }
-hash = {administrate: administrate, devise: devise, webpacker: webpacker, friendly_id: friendly_id}
+hash = { administrate: administrate, devise: devise, webpacker: webpacker, graphql: graphql, friendly_id: friendly_id }
 remove_file 'Gemfile'
 remove_file '.ruby-version'
 
 template File.join(relative_path, 'ruby-version.tt'), '.ruby-version'
 template File.join(relative_path, "Gemfile.tt"), "Gemfile", hash
 run 'bundle install'
+
 after_bundle do
   remove_dir "test"
   generate 'graphql:install'
 end
-
-run 'bundle install'
-
 
 application do
   <<-RUBY
@@ -91,6 +88,4 @@ insert_into_file 'config/application.rb', after: "Bundler.require(*Rails.groups)
 end
 
 copy_file File.join(relative_path, 'database.yml'), 'config/database.yml', force: true
-
-remove_dir "test"
 

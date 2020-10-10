@@ -7,14 +7,14 @@ gem 'administrate'
 <% end %>
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
-<% if config[:administrate] %>
+<% if config[:devise] %>
 gem 'devise'
 <% end %>
 <% if config[:graphql] %>
 gem 'graphql'
 gem 'apollo_upload_server'
 <% end %>
-gem 'dry-configurable's
+gem 'dry-configurable'
 gem 'dry-validation'
 gem 'faraday'
 <% if config[:friendly_id] %>
