@@ -1,0 +1,25 @@
+FROM ruby:<%=RUBY_VERSION%>-alpine
+
+RUN apk --update --no-cache add \
+  bash \
+  build-base \
+  curl \
+  imagemagick \
+  git \
+  jq \
+  less \
+  postgresql-client \
+  postgresql-dev \
+  yarn
+
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+
+WORKDIR /app
+COPY Gemfile Gemfile.lock /app/
+RUN bundle install --jobs 4 --without development:test --deployment
+
+COPY . /app/
+
+EXPOSE 3000
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]

@@ -13,7 +13,7 @@
 /testgen/
 
 # Used by dotenv library to load environment variables.
-# .env
+# .env.tt
 
 # Ignore Byebug command history file.
 .byebug_history

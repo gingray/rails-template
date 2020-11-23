@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  db:
+    environment:
+      POSTGRES_USER: <%=@app_name%>
+      POSTGRES_PASSWORD: <%=@app_name%>
+    image: postgres:11.3
+    ports:
+      - 5432:5432
+  redis:
+    image: redis:5.0.5-alpine
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - 6379:6379

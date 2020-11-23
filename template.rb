@@ -1,5 +1,9 @@
+#require 'pry'
+
 relative_path = File.dirname(__FILE__)
 is_api = self.options["api"]
+@app_name = ask('app_name') || 'app'
+
 if is_api
   graphql = ask('use graphql y/n?').downcase == 'y'
 else
@@ -54,9 +58,14 @@ run 'spring stop'
 generate 'rspec:install'
 generate 'annotate:install'
 remove_file '.rspec'
+
 copy_file File.join(relative_path, '.rspec'), '.rspec'
+template File.join(relative_path,'files', '.env.tt'), '.env'
+template File.join(relative_path,'files', 'docker-compose.dev.yml.tt'), 'docker-compose.dev.yml'
+template File.join(relative_path,'files', 'Dockerfile.tt'), 'Dockerfile'
+
+
 copy_file File.join(relative_path, '.env.example'), '.env.example'
-copy_file File.join(relative_path, '.env.example'), '.env'
 copy_file File.join(relative_path, '.rubocop.yml'), '.rubocop.yml'
 
 insert_into_file 'spec/spec_helper.rb', before: 'RSpec.configure do |config|' do
