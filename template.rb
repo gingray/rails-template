@@ -100,7 +100,7 @@ end
 
 insert_into_file 'config/application.rb', after: "Bundler.require(*Rails.groups)\n" do
   <<~RUBY
-    Dotenv::Railtie.load
+    Dotenv::Railtie.load if Rails.env.development? || Rails.env.test?
   RUBY
 end
 
