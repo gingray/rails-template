@@ -45,7 +45,7 @@ gem 'webpacker', '~> 4.0'
 
 group :development, :test do
   gem 'brakeman'
-  gem 'dotenv-rails', '~> 2.5', require: false
+  gem 'dotenv-rails', require: 'dotenv/rails-now'
   gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'pry-rails'

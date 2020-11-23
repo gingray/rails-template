@@ -1,10 +1,15 @@
 relative_path = File.dirname(__FILE__)
-administrate = ask('use administrate y/n?').downcase == 'y'
-devise = ask('use devise y/n?').downcase == 'y'
-webpacker = ask('use webpacker y/n?').downcase == 'y'
-graphql = ask('use graphql y/n?').downcase == 'y'
-friendly_id = ask('use friendly_id y/n?').downcase == 'y'
+is_api = self.options["api"]
+if is_api
+  graphql = ask('use graphql y/n?').downcase == 'y'
+else
+  administrate = ask('use administrate y/n?').downcase == 'y'
+  webpacker = ask('use webpacker y/n?').downcase == 'y'
+  friendly_id = ask('use friendly_id y/n?').downcase == 'y'
+  graphql = ask('use graphql y/n?').downcase == 'y'
+end
 
+devise = ask('use devise y/n?').downcase == 'y'
 
 hash = { administrate: administrate, devise: devise, webpacker: webpacker, graphql: graphql, friendly_id: friendly_id }
 remove_file 'Gemfile'
@@ -12,10 +17,12 @@ remove_file '.ruby-version'
 
 template File.join(relative_path, 'ruby-version.tt'), '.ruby-version'
 template File.join(relative_path, "Gemfile.tt"), "Gemfile", hash
+template File.join(relative_path, "manifest.js"), "app/assets/config/manifest.js" if is_api
+
 run 'bundle install'
 
 after_bundle do
-  remove_dir "test"
+  remove_dir "test" if graphql
   generate 'graphql:install'
 end
 
@@ -39,6 +46,7 @@ application do
       end
     end
   end
+  #{is_api ? 'config.assets.enabled = false' : ''}
   RUBY
 end
 
