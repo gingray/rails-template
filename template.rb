@@ -22,8 +22,8 @@ template File.join(relative_path, "manifest.js"), "app/assets/config/manifest.js
 run 'bundle install'
 
 after_bundle do
-  remove_dir "test" if graphql
-  generate 'graphql:install'
+  remove_dir "test"
+  generate 'graphql:install' if graphql
 end
 
 application do

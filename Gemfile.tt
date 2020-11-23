@@ -20,6 +20,7 @@ gem 'faraday'
 <% if config[:friendly_id] %>
 gem 'friendly_id', '~> 5.2.4'
 <% end %>
+gem 'jsonapi-serializer'
 gem 'health-monitor-rails'
 gem 'jwt', '~> 2.2.1'
 gem 'kaminari', '~> 1.1.1'
