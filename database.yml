@@ -10,6 +10,8 @@ default: &default
 
 development:
   <<: *default
+  database: <%= ENV.fetch("DATABASE_NAME") %>_dev
+
 
 test:
   <<: *default
@@ -17,5 +19,5 @@ test:
 
 production:
   <<: *default
-  database: <%= ENV.fetch("DATABASE_NAME") %>
+  database: <%= ENV.fetch("DATABASE_NAME") %>_prod
 
